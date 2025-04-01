@@ -1,4 +1,5 @@
 package com.example.mvc.learn.week2.entities;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class EmployeeEntity {
 
     private LocalDate dateOfJoining;
 
+    @JsonProperty("isActive")
     private Boolean isActive;
 }

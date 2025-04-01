@@ -2,10 +2,13 @@ package com.example.mvc.learn.week2.controllers;
 
 import com.example.mvc.learn.week2.dto.EmployeeDTO;
 import com.example.mvc.learn.week2.services.EmployeeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/employees")
@@ -18,9 +21,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id)
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(name = "employeeId") Long id)
     {
-        return employeeService.getEmployeeById(id);
+         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(id);
+        return employeeDTO.map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -35,4 +40,25 @@ public class EmployeeController {
         return employeeService.createNewEmployee(inputEmployee);
     }
 
+    @PutMapping("/{employeeId}")
+
+    public EmployeeDTO updateEmployeeById(@PathVariable Long employeeId, @RequestBody EmployeeDTO inputEmployee)
+    {
+        return employeeService.updateEmployeeById(employeeId,inputEmployee);
+    }
+
+    @DeleteMapping("/{employeeId}")
+
+    public boolean deleteEmployeeById(@PathVariable Long employeeId)
+    {
+        return employeeService.deleteEmployeeById(employeeId);
+    }
+
+    @PatchMapping("/{employeeId}")
+
+    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String,Object> updates,
+                                                 @PathVariable Long employeeId)
+    {
+        return employeeService.updatePartialEmployeeById(updates,employeeId);
+    }
 }
