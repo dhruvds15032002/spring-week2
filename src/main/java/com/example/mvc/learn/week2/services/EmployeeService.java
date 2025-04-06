@@ -3,6 +3,7 @@ package com.example.mvc.learn.week2.services;
 import com.example.mvc.learn.week2.configs.MapperConfig;
 import com.example.mvc.learn.week2.dto.EmployeeDTO;
 import com.example.mvc.learn.week2.entities.EmployeeEntity;
+import com.example.mvc.learn.week2.exceptions.ResourceNotFoundException;
 import com.example.mvc.learn.week2.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
@@ -48,6 +49,11 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO inputEmployee) {
+        boolean employeeExists = employeeRepository.existsById(employeeId);
+        if(!employeeExists)
+        {
+            throw new ResourceNotFoundException("Employee not found with id: "+employeeId);
+        }
         EmployeeEntity beforeSaveEmployee = modelMapper.map(inputEmployee,EmployeeEntity.class);
         beforeSaveEmployee.setId(employeeId);
         EmployeeEntity updatedEmployee = employeeRepository.save(beforeSaveEmployee);

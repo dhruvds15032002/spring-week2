@@ -1,4 +1,5 @@
 package com.example.mvc.learn.week2.entities;
+import com.example.mvc.learn.week2.annotations.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,9 @@ public class EmployeeEntity {
     private Integer age;
 
     private LocalDate dateOfJoining;
+
+    @EmployeeRoleValidation
+    private String role;
 
     @JsonProperty("isActive")
     private Boolean isActive;

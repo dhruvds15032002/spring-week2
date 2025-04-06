@@ -1,11 +1,11 @@
 package com.example.mvc.learn.week2.controllers;
 
 import com.example.mvc.learn.week2.dto.EmployeeDTO;
+import com.example.mvc.learn.week2.exceptions.ResourceNotFoundException;
 import com.example.mvc.learn.week2.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class EmployeeController {
     {
          Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(id);
         return employeeDTO.map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Not found"));
     }
 
     @GetMapping
@@ -35,7 +35,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployee)
+    public EmployeeDTO createNewEmployee(@RequestBody @Valid EmployeeDTO inputEmployee)
     {
         return employeeService.createNewEmployee(inputEmployee);
     }
@@ -56,7 +56,7 @@ public class EmployeeController {
 
     @PatchMapping("/{employeeId}")
 
-    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String,Object> updates,
+    public EmployeeDTO updatePartialEmployeeById(@RequestBody @Valid Map<String,Object> updates,
                                                  @PathVariable Long employeeId)
     {
         return employeeService.updatePartialEmployeeById(updates,employeeId);

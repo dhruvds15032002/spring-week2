@@ -1,10 +1,9 @@
 package com.example.mvc.learn.week2.dto;
 
+import com.example.mvc.learn.week2.annotations.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -15,6 +14,7 @@ import java.time.LocalDate;
 public class EmployeeDTO {
     private Long id;
 
+    @NotNull(message = "Required Field in Employee: name")
     private String name;
 
     private String email;
@@ -22,6 +22,9 @@ public class EmployeeDTO {
     private Integer age;
 
     private LocalDate dateOfJoining;
+
+    @EmployeeRoleValidation
+    private String role;
 
     @JsonProperty("isActive")
     private Boolean isActive;
